@@ -1,0 +1,107 @@
+image: node:10
+
+stages:
+  - build
+  - test
+  - deploy staging
+  - deploy review
+  - deploy production
+  - production tests
+
+cache:
+  key: ${CI_COMMIT_REF_SLUG} (CI_COMMIT_REF_SLUG is an environment variable that holds the "slugified" version of the branch or tag name associated with a particular CI/CD pipeline run.)
+  paths: 
+    - node_modules/
+
+variables:
+  STAGING_DOMAIN: farooqcloud-staging.surge.sh
+  PRODUCTION_DOMAIN: farooqcloud.surge.sh
+
+
+build website:
+  stage: build
+  script:
+    - echo $CI_COMMIT_SHORT_SHA (It will give the commit ID)
+    - npm install
+    - npm install -g gatsby-cli
+    - gatsby build
+    - sed -i "s/%%VERSION%%/$CI_COMMIT_SHORT_SHA/" ./public/index.html
+  artifacts: 
+    paths: 
+      - ./public
+
+test artifact:
+  image: alpine
+  stage: test
+  script:
+    - grep -q "Gatsby" ./public/index.html
+
+test website:
+  stage: test
+  script: 
+    - npm install
+    - npm install -g gatsby-cli
+    - gatsby serve &
+    - sleep 3
+    - curl "http://localhost:9000" | grep -q "Gatsby"
+
+
+deploy review:
+  stage:
+  only: 
+    - merge_request
+  environment: 
+    name: review/$CI_COMMIT_REF_NAME
+    url: https://farooqcloud-$CI_ENVIORNMENT_SLUG.surge.sh
+    on_stop: stop review
+  script: 
+    - npm install --global surge
+    - surge --project ./public --domain farooqcloud-$CI_ENVIORNMENT_SLUG.surge.sh
+
+stop review:
+  stage: deploy review
+  variables: 
+    GIT_STRATEGY: none
+  script: 
+    - npm install --global surge
+    - surge teardown farooq-$CI_ENVIRONMENT_SLUG.surge.sh
+  when: manual
+  environment:
+    name: review/$CI_COMMIT_REF_NAME
+    action: stop
+
+.deploy_templates: &deploy
+  only: 
+    - master
+  script: 
+    - npm install --global surge
+    - surge --project ./public --domain $DOMAIN
+  environment:
+    url: http://$DOMAIN
+
+deploy staging:
+  <<: *deploy
+  stage: deploy staging
+  variable: 
+    DOMAIN: $STAGING_DOMAIN
+  environment:
+    name: staging
+  
+deploy production:
+  <<: *deploy
+  stage: deploy production
+  variable: 
+    DOMAIN: $PRODUCTION_DOMAIN
+  environment:
+    name: production
+     
+
+production tests:
+  image: alpine
+  stage: production tests
+  only: 
+    - master
+  script: 
+    - apk add --no-cache curl
+    - curl -s "https://$PRODUCTION_DOMAIN" | grep -q "Hi People"
+    - curl -s "https://$PRODUCTION_DOMAIN" | grep -q "$CI_COMMIT_SHORT_SHA"

@@ -1,0 +1,27 @@
+                                                GitLab
+* Why GitLab CI?
+
+* Simple,Scalable architecture
+* Docker first approach
+* Pipeline as a Code
+* Merge Requests with CI support
+----------------------------------------------------------
+
+* For this course, you will need an account with GitLab.com. If you don't have one you can create one for free.
+* The alternative is to set up your own GitLab runners, which is a path I don't recommend for beginners.
+* However, if you wish to do so, here is a very simple tutorial on how to do that:
+
+    * Setup GitLab CI Runner with Docker Executor on Windows 10/11
+
+   https://medium.com/devops-with-valentine/setup-gitlab-ci-runner-with-docker-executor-on-windows-10-11-c58dafba9191
+
+
+* How to Configure your own GitLab Runner with a Docker Executor on AWS EC2
+    Configure GitLab CI Runner with Docker executor using AWS EC2( Search in youtube-Valentin Despa)
+
+* How to configure your own Gitlab CI Runner (macOS). 
+    How to configure your own Gitlab CI Runner( Search in youtube-Valentin Despa)
+
+* Make sure that the system where you are installing the GitLab CI runner has Docker installed and that you define a Docker executor (and not a shell executor).
+
+* I strongly advise against going on this path, especially at this point in time. Using the shared runners from GitLab.com is the best way to learn about GitLab CI.

@@ -1,0 +1,46 @@
+stages:
+  - build
+  - test
+
+build the car:
+  stage: build
+  script:
+    - mkdir build
+    - cd build
+    - touch car.txt
+    - echo "chasis" >> car.txt
+    - echo "engine" >> car.txt
+    - echo "wheels" >> car.txt
+  artifacts:
+    paths:
+      - build/
+
+
+test the car:
+  stage: test
+  script:
+    - ls
+    - test -f build/car.txt
+    - cd build
+    - cat car.txt 
+    - grep "chasis" car.txt
+    - grep "engine" car.txt
+    - grep "wheels" car.txt
+
+
+===========================================================================================================================
+
+Note:   * The test command is used to verify that the file car.txt was created.
+        * The -f flag is needed to check that the specified file exists and is a regular file.
+
+
+                        My GitLab CI pipeline is not running
+
+
+* You may encounter a problem where your GitLab CI pipeline is not running.
+
+  Make sure that:
+
+- You have named your file .gitlab-ci.yml (and not gitlab-ci.yml or .gitlab-ci.yaml)
+
+- the pipeline file is in the root of the project and not inside a directory

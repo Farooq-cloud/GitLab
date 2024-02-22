@@ -1,0 +1,18 @@
+* No SSH key for GitLab?
+* If you are just starting Gitlab CI, as soon as you have created a new project, you will be asked to add an SSH key.
+* You can still do changes to the repository WITHOUT doing this step.
+* You are free to skip it for the moment but if you want to push changes from your own computer, you will need to complete this step.
+
+* Setup Git for using GitLab (including SSH key) - Windows 10 -Youtube.
+
+* If you want to clone the repository. we have two options:
+
+  * Clone with SSH
+  * Clone with HTTPS
+
+* If you want to clone with HTTPS it will ask for username and password. while working with remote servers we usually dont work with username and password,we work with SSH. SSH is an way to authenticate the without username and password.
+* SSH stands for secuer shell. It is a cryptographic protocal based on the public and private keys.
+
+* Now we need to create a public and private keypairs using the # ssh-keygen command.
+* After generating the key pairs. Copy the id_rsa.pub i.e public key in the gitlab.
+* In gitlab we have our profile logo >> slect preferences >> we have sshkeys option there we have to save.

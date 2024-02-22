@@ -1,0 +1,11 @@
+* If you want to install gatsby through your local gitbash. First of all install Node.js from https://nodejs.org/en.
+* Now open gitbash in your locall and check the below commands
+# node -v
+# npm -v
+# npm install -g gatsby-cli
+# gatsby new static-website
+# cd static-website
+# gatsby develop
+# http://localhost:8000/ --> A new website will appear.
+# gatsby build
+# cd public/
